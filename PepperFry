@@ -63,7 +63,7 @@ public class PepperFry {
      driver.findElement(By.xpath("//span[contains(@class,'wewidgeticon we_close')]")).click();
      driver.switchTo().defaultContent();
 	//select 7k to 8k
-     WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(10));
+     WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(30));
      
      WebElement price=driver.findElement(By.xpath("//label[text()='₹ 7,000 to ₹ 8,000']"));
      builder.click(price).perform();
