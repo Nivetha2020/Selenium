@@ -1,0 +1,89 @@
+package week4.day1;
+
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class IrctcFlight {
+
+	public static void main(String[] args) throws InterruptedException {
+		WebDriverManager.chromedriver().setup();
+		ChromeOptions option = new ChromeOptions();
+		option.addArguments("--disable-notifications");
+		ChromeDriver driver = new ChromeDriver(option);
+		driver.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS);
+		driver.get("https://www.irctc.co.in/");
+		driver.manage().window().maximize();
+		
+		
+		
+		//pseudo code
+		//driver.findElement(By.xpath("//button[@type='submit']")).click();-- alert handling
+		//driver.findElement(By.xpath("//a[@href='https://www.air.irctc.co.in']")).click(); --flights link
+		//move to new flights tab
+		//String  = driver.findElement(By.xpath("//div[contains(@class,'block-nav-right d-none')]//a")).getText(); --customer care number
+		//String flightsirctccoin = driver.findElement(By.xpath("//a[@href='mailto:flights@irctc.co.in']")).getText(); --number
+		//close the main window - first window and keep the active window opened
+		Thread.sleep(2000);
+		
+		//ok in sweet alert
+		driver.findElement(By.xpath("//button[text()='OK']")).click();
+		try
+		{
+			driver.switchTo().alert().accept();
+		}
+		catch(NoAlertPresentException e)
+		{
+			System.out.println("Alert is closed");
+		}
+		
+		/*driver.findElement(By.xpath("//div[contains(@class,'ng-trigger ng-trigger-animation')]//div"));
+		driver.findElement(By.xpath("//div[@class='text-center col-xs-12']//button[1]")).click();
+		//alert
+		driver.findElement(By.xpath("//div[contains(@class,'ng-trigger ng-trigger-animation')]//div"));
+		driver.findElement(By.xpath("//div[@class='text-center col-xs-12']//button[1]")).click();*/
+		
+		//click flights
+		driver.findElement(By.xpath("//a[@href='https://www.air.irctc.co.in']")).click();
+		
+		//move to flights tab
+		Set<String> allwindow=driver.getWindowHandles();
+		Thread.sleep(5000);
+		List<String> lstwindow=new ArrayList<String>(allwindow);
+		String flightwindow=lstwindow.get(1);
+		driver.switchTo().window(flightwindow);
+		
+	//print customer care number and mailid
+		WebElement  custnumber= driver.findElement(By.xpath("//a[@href='mailto:flights@irctc.co.in']"));
+		System.out.println("The customer care number "+custnumber.getText() );
+		WebElement mailid = driver.findElement(By.xpath("//a[@href='mailto:flights@irctc.co.in']"));
+		System.out.println("The customer mail id "+mailid.getText() );
+		
+		//close main tab
+		String firstwindow=lstwindow.get(0);
+		driver.switchTo().window(firstwindow);
+		driver.close();
+		
+		driver.switchTo().window(flightwindow);
+		
+		
+		
+		
+		
+		
+}
+
+}
