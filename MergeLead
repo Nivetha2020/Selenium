@@ -72,7 +72,7 @@ public class MergeLead {
 	 		driver.findElement(By.name("id")).sendKeys("10177");
 	 		driver.findElement(By.xpath("//button[text()='Find Leads']")).click();
 	 		//verify no records to display 
-	 		//div[text()='No records to display']
+	 		
 	 		Thread.sleep(1000);
 	 		boolean displayed=driver.findElement(By.xpath("//div[@class='x-panel-bbar']/div/table/following-sibling::div")).isDisplayed();
 			if(displayed)
