@@ -7,14 +7,16 @@ import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class Amazon {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		WebDriverManager.chromedriver().setup();
 		ChromeOptions option = new ChromeOptions();
 		option.addArguments("--disable-notifications");
@@ -29,23 +31,44 @@ public class Amazon {
 		String  firstmobprice= driver.findElement(By.xpath("//span[@class='a-price-symbol']/following-sibling::span")).getText();
 		System.out.println("First mobile price "+firstmobprice);
 	
+		
 		//click on image of phone
-		driver.findElement(By.xpath("//div[contains(@class,'a-section aok-relative')]//img")).click();
-		//move to new window
-		Set<String> window=driver.getWindowHandles();
+		WebElement clickmob=driver.findElement(By.xpath("//div[contains(@class,'a-section aok-relative')]//img"));
+		clickmob.click();
+		
+        Set<String> window=driver.getWindowHandles();
 		
 		List<String> allwindows=new ArrayList<String>(window);
 		String secwindow=allwindows.get(1);
 		driver.switchTo().window(secwindow);
+		
+		Thread.sleep(2000);
 		//customer ratings
-		String ratings = driver.findElement(By.xpath("//a[@class='a-popover-trigger a-declarative']//i")).getText();
-		System.out.println("Customer ratings "+ratings);
+		       Actions actions = new Actions(driver);
+				WebElement ratinghover =driver.findElement(By.xpath("//a[@class='a-popover-trigger a-declarative']//i"));
+				actions.moveToElement(ratinghover).perform();
+				WebElement ratingsstar = driver.findElement(By.xpath("(//span[text()='4.5 out of 5'])[3]"));
+				System.out.println("Star Ratings " +ratingsstar.getText());
+				WebElement ratings = driver.findElement(By.xpath("//span[@id='acrCustomerReviewText']"));
+				System.out.println("Customer ratings "+ratings.getText());
+		//move to new window
+		
+		
 		
 		//add to cart
 		driver.findElement(By.id("add-to-cart-button")).click();
+		
 		//added to cart verify message
-		String addedToCart = driver.findElement(By.xpath("(//div[@class='a-box-inner a-alert-container']//h4)[3]")).getText();
-		System.out.println(addedToCart);
+		boolean displayed=driver.findElement(By.xpath("(//h4[text()='Added to Cart'])[2]")).isDisplayed();
+		if(displayed)
+		{
+			System.out.println("The added to card message is verified");
+		}
+		/*Actions actions = new Actions(driver);
+		WebElement addedToCart = driver.findElement(By.xpath("//*[@id=\"attachDisplayAddBaseAlert\"]/div/h4"));
+		actions.moveToElement(addedToCart);
+		System.out.println(addedToCart.getText());*/
+		
 		
 		driver.findElement(By.xpath("//*[@id=\"attach-sidesheet-checkout-button\"]/span/input")).click();
 		
@@ -67,6 +90,19 @@ public class Amazon {
 		
 		driver.quit();
 		
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	}
 
 }
