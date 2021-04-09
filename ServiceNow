@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.tools.ant.taskdefs.WaitFor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -11,6 +12,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.Wait;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
@@ -49,9 +51,12 @@ public class ServiceNow {
 		driver.findElement(By.id("sysverb_new")).click();
 		Thread.sleep(2000);
 		//INC0018874
-		String incidentnumebr="";
-		incidentnumebr = driver.findElement(By.id("incident.number")).getText();
 		
+		String incidentnumebr="";
+		incidentnumebr = driver.findElement(By.id("incident.number")).getAttribute("value");
+		//incidentnumebr = driver.findElement(By.id("incident.number")).getText();
+		//incidentnumebr = driver.findElement(By.xpath("//*[@id=\"incident.number\"]")).getCssValue("#incident\\.number");
+		System.out.println("The incident number is "+incidentnumebr);
 		
 		
 		//value for caller
@@ -103,15 +108,18 @@ public class ServiceNow {
 		new Select(forTextNum).selectByVisibleText("for text"); 
 		
 		//search incident
-		int incnum = Integer.parseInt(incidentnumebr.replaceAll("\\D", ""));
-		WebElement searchinc=driver.findElement(By.xpath("//*[@id=\"ccf3a74f2f1f6010d75124c62799b684_text\"]"));
-		builder.moveToElement(searchinc).sendKeys(String.valueOf(incnum),Keys.ENTER).perform();
+		
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//input[@placeholder='Search']")).sendKeys(incidentnumebr,Keys.ENTER);
+		//builder.moveToElement(searchinc).sendKeys(incidentnumebr,Keys.ENTER).perform();
 		
 		//verify incident creation
 		Thread.sleep(2000);
 		WebElement inc=driver.findElement(By.xpath("//td[@class='vt']//a"));
-		boolean verifyinc=driver.findElement(By.name(incidentnumebr)).isDisplayed();
-		if(verifyinc)
+		String verifyinc=driver.findElement(By.cssSelector("#row_incident_fcaf0a932f57a010d75124c62799b611 > td:nth-child(3) > a")).getAttribute("value");
+		System.out.println("The created incident number "+verifyinc);
+		//boolean verifyinc=driver.findElement(By.cssSelector("#row_incident_fcaf0a932f57a010d75124c62799b611 > td:nth-child(3) > a")).isDisplayed();
+		if(verifyinc==incidentnumebr)
 		{
 			System.out.println("The incident is created successfully");
 		};
