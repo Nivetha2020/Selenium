@@ -120,11 +120,12 @@ public class ServiceNow {
 		String verifyinc=inc.getText();
 		System.out.println("The created incident number "+verifyinc);
 		boolean verify=driver.findElement(By.xpath("//*[@aria-label='Open record: "+incidentnumebr+"']")).isDisplayed();
-		if(verifyinc==incidentnumebr)
+		if(verify==true)
 		{
+			if(verifyinc.equals(incidentnumebr)) {
 			System.out.println("The incident is created successfully");
 		}
-		
+		}
 		
 		
 		
