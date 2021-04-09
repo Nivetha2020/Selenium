@@ -115,14 +115,15 @@ public class ServiceNow {
 		
 		//verify incident creation
 		Thread.sleep(2000);
-		WebElement inc=driver.findElement(By.xpath("//td[@class='vt']//a"));
-		String verifyinc=driver.findElement(By.cssSelector("#row_incident_fcaf0a932f57a010d75124c62799b611 > td:nth-child(3) > a")).getAttribute("value");
+		WebElement inc=driver.findElement(By.linkText("INC0019047"));
+		//String verifyinc=driver.findElement(By.cssSelector("#row_incident_fcaf0a932f57a010d75124c62799b611 > td:nth-child(3) > a")).getAttribute("value");
+        String verifyinc=inc.getAttribute("value");
 		System.out.println("The created incident number "+verifyinc);
 		//boolean verifyinc=driver.findElement(By.cssSelector("#row_incident_fcaf0a932f57a010d75124c62799b611 > td:nth-child(3) > a")).isDisplayed();
 		if(verifyinc==incidentnumebr)
 		{
 			System.out.println("The incident is created successfully");
-		};
+		}
 		
 		
 		
