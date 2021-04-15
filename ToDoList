@@ -1,0 +1,103 @@
+package todolist;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class CreateList {
+
+	public static void main(String[] args) throws InterruptedException {
+		//Initializing WebDriver for chrome driver
+		WebDriverManager.chromedriver().setup();
+		// including chrome options to disable notifications
+		ChromeOptions options=new ChromeOptions();
+		options.addArguments("--disable-notifications");
+		//initializing chrome driver
+		ChromeDriver driver=new ChromeDriver(options);
+		//maximize the window
+		driver.manage().window().maximize();
+		//launching the website url
+		driver.get("http://todomvc.com/examples/vue/");
+		
+		//Creating list of todo list through the input field
+		driver.findElement(By.xpath("//header[@class='header']//input[1]")).sendKeys("First item in the list",Keys.ENTER);
+		driver.findElement(By.xpath("//header[@class='header']//input[1]")).sendKeys("Second item in the list",Keys.ENTER);
+		 driver.findElement(By.xpath("//header[@class='header']//input[1]")).sendKeys("Third item in the list",Keys.ENTER);
+		 driver.findElement(By.xpath("//header[@class='header']//input[1]")).sendKeys("Fouth item in the list",Keys.ENTER);
+		 driver.findElement(By.xpath("//header[@class='header']//input[1]")).sendKeys("Fifth item in the list",Keys.ENTER);
+		 driver.findElement(By.xpath("//header[@class='header']//input[1]")).sendKeys("Sixth item in the list",Keys.ENTER);
+
+		 
+		 //click active 
+		 driver.findElement(By.xpath("//a[@href='#/active']")).click();
+		 //get all the list of todo list that are active
+		 List<WebElement> listofelements = driver.findElements(By.xpath("//div[@class='view']//label"));
+		
+		  List<String> toDoList=new ArrayList<String>();
+		 for (int i = 0; i < listofelements.size(); i++) { 
+			 toDoList.add(listofelements.get(i).getText());
+			 System.out.println(listofelements.get(i).getText());
+			 
+		 }
+		 System.out.println("*****************************************************************************");
+		 //click the checkbox to move the 1st and 3rd item to completed list
+		 driver.findElement(By.xpath("//div[@class='view']//input")).click();
+		 Thread.sleep(2000);
+		 driver.findElement(By.xpath("(//div[@class='view']//input)[2]")).click();
+		 
+		 //move to completed tab
+		 driver.findElement(By.xpath("//a[@href='#/completed']")).click();
+		 
+		 //get the list of completed to do list
+		List<WebElement> completedtodo = driver.findElements(By.xpath("//div[@class='view']//label"));
+		 
+		  List<String> toDocompleted=new ArrayList<String>();
+			 for (int i = 0; i < completedtodo.size(); i++) { 
+				 toDocompleted.add(completedtodo.get(i).getText());
+                 System.out.println(completedtodo.get(i).getText());
+			 }
+		 
+		 // uncheck and move the item to active to do list
+			 //moving the third item back to active and verify that it is moved
+			
+			 driver.findElement(By.xpath("(//div[@class='view']//input)[2]")).click();
+			 
+			 //move to all tab to verify whether the item is active after unchecking
+			 driver.findElement(By.xpath("//a[@href='#/all']")).click();
+			 //verify the 3rd item moved and is unchecked and found in the all list
+			 if ( !driver.findElement(By.xpath("(//div[@class='view']//input)[2]")).isSelected() )
+			 {
+				 System.out.println("*****************************************************************************");
+			      System.out.println("The 3rd item is moved back to active list");
+			 }
+			 
+			
+		 
+			 //click clear completed
+			 driver.findElement(By.xpath("//footer[@class='footer']//button[1]")).click();
+			 //verify if the list of completed items is removed 
+			 /*
+			  * 1. three ways to check
+			  *    a. if completed list is empty
+			  *    b. in all tab no option if checked or ruled out
+			  *    c. before clearing can get list and afterthat can compare if the item is not in all tab
+			 
+			  * 
+			  * 
+			  */
+			 driver.findElement(By.xpath("//a[@href='#/all']")).click();
+			 
+				
+			
+		 
+		 
+	}
+
+}
